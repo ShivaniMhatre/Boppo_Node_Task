@@ -19,16 +19,9 @@ const productSchema = new Schema({
     },
     category: {
         type: String
-    },
-    slug: {
-        type: String,
-        unique: true
     }
 })
 
-productSchema.pre('save', function (next) {
-    this.slug = slugify(this.title, { lower: true, remove: /[*+-.()'"!:@]/g });
-    next();
-})
+
 
 export default mongoose.model('product', productSchema)
