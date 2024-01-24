@@ -3,7 +3,7 @@ import product from "../models/product.js";
 
 export const Addproduct = async (req, res) => {
     try {
-        const { title, description, price, cateId ,slug} = req.body;
+        const { title, description, price, cateId, slug } = req.body;
 
         if (!title || !description || !price)
             return res.json({
@@ -61,6 +61,32 @@ export const GetProduct = async (req, res) => {
     }
 }
 
+export const GetProductByParams = async (req, res) => {
+    try {
+        const { prodId } = req.params;
+        const Product = await product.findById(prodId)
+        if (Product) {
+            return res.json({
+                success: true,
+                message: "All Fetch",
+                Product: Product
+            })
+        }
+        else {
+            return res.json({
+                success: false,
+                message: "No Data Found"
+            })
+        }
+    }
+    catch (err) {
+        return res.json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
 export const UpdateProduct = async (req, res) => {
     try {
         const { prodId, title, description, price } = req.body;
@@ -69,7 +95,35 @@ export const UpdateProduct = async (req, res) => {
 
         if (!findProduct)
             return res.json({ success: false, message: "Product Not Found" })
-        const updateProduct = await product.findOneAndUpdate(
+            const updateProduct = await product.findByIdAndUpdate(
+            { _id: findProduct._id },
+            { title, description, price },
+            { new: true }
+        )
+        return res.json({
+            success: true,
+            message: "update....",
+            updateProduct: updateProduct
+        })
+    }
+    catch (err) {
+        return res.json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
+export const UpdateProductByParams = async (req, res) => {
+    try {
+        const { title, description, price } = req.body;
+        const{prodId}=req.params
+        const findProduct = await product.findById(prodId)
+
+
+        if (!findProduct)
+            return res.json({ success: false, message: "Product Not Found" })
+            const updateProduct = await product.findByIdAndUpdate(
             { _id: findProduct._id },
             { title, description, price },
             { new: true }
@@ -96,7 +150,33 @@ export const DeleteProduct = async (req, res) => {
 
         if (!findProduct)
             return res.json({ success: false, message: "Product Not Found" })
-        const deleteProduct = await product.findOneAndDelete(
+        const deleteProduct = await product.findByIdAndDelete(
+            { _id: findProduct._id },
+
+        )
+        return res.json({
+            success: true,
+            message: "Delete....",
+            deleteProduct: deleteProduct
+        })
+    }
+    catch (err) {
+        return res.json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
+export const DeleteByParams = async (req, res) => {
+    try {
+        const { prodId } = req.params;
+        const findProduct = await product.findById(prodId)
+
+
+        if (!findProduct)
+            return res.json({ success: false, message: "Product Not Found" })
+        const deleteProduct = await product.findByIdAndDelete(
             { _id: findProduct._id },
 
         )

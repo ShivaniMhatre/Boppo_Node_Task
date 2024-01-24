@@ -2,7 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import { AddCategory, GetCate } from './controllers/catecontroller.js'
-import { Addproduct, DeleteProduct, GetProduct, UpdateProduct } from './controllers/productcontroller.js'
+import { Addproduct, DeleteByParams, DeleteProduct, GetProduct, GetProductByParams, UpdateProduct, UpdateProductByParams } from './controllers/productcontroller.js'
 
 const app = express()
 
@@ -19,9 +19,15 @@ app.get('/getcate',GetCate)
 
 
 app.post('/addproduct',Addproduct)
-app.get('/getproduct/',GetProduct)
-app.patch('/updateproduct',UpdateProduct)
-app.delete('/deleteproduct',DeleteProduct)
+
+app.get('/getproduct',GetProduct)
+app.get('/getproductbyparams/:prodId',GetProductByParams) 
+
+app.put('/updateproduct',UpdateProduct)
+app.put('/updatebyparams/:prodId',UpdateProductByParams)
+
+app.delete('/deleteproduct/',DeleteProduct)
+app.delete('/deletebyparams/:prodId',DeleteByParams)
 mongoose
     .connect(process.env.MONGO_URL)
     .then(() => {

@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 import slugify from "slugify";
-import slug from "slugify";
 
 const productSchema = new Schema({
     title: {
@@ -21,14 +20,14 @@ const productSchema = new Schema({
     category: {
         type: String
     },
-    slug:{
-        type:String,
-        unique:true
+    slug: {
+        type: String,
+        unique: true
     }
 })
 
-productSchema.pre('save',function(next){
-    this.slug=slugify(this.title,{lower:true,remove:/[*+-.()'"!:@]/g});
+productSchema.pre('save', function (next) {
+    this.slug = slugify(this.title, { lower: true, remove: /[*+-.()'"!:@]/g });
     next();
 })
 
